@@ -6,7 +6,7 @@ package server
 
 import (
 	"expvar"
-	myexpvar "github.com/chobie/momonga/expvar"
+	myexpvar "github.com/aonx/momonga/expvar"
 )
 
 type MyBroker struct {

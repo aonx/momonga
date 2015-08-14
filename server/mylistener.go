@@ -1,7 +1,7 @@
 package server
 
 import (
-	log "github.com/chobie/momonga/logger"
+	log "github.com/aonx/momonga/logger"
 	"net"
 	"os"
 	"sync"

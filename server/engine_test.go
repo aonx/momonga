@@ -2,10 +2,10 @@ package server
 
 import (
 	"bytes"
-	. "github.com/chobie/momonga/common"
-	"github.com/chobie/momonga/configuration"
-	codec "github.com/chobie/momonga/encoding/mqtt"
-	log "github.com/chobie/momonga/logger"
+	. "github.com/aonx/momonga/common"
+	"github.com/aonx/momonga/configuration"
+	codec "github.com/aonx/momonga/encoding/mqtt"
+	log "github.com/aonx/momonga/logger"
 	. "gopkg.in/check.v1"
 	"net"
 	"os"

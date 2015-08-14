@@ -5,9 +5,9 @@
 package server
 
 import (
-	. "github.com/chobie/momonga/common"
-	codec "github.com/chobie/momonga/encoding/mqtt"
-	log "github.com/chobie/momonga/logger"
+	. "github.com/aonx/momonga/common"
+	codec "github.com/aonx/momonga/encoding/mqtt"
+	log "github.com/aonx/momonga/logger"
 )
 
 // Handler dispatches messages which sent by client.

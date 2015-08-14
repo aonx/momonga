@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/chobie/momonga/configuration"
+	"github.com/aonx/momonga/configuration"
 )
 
 // EmptyAuthenticator allows anything.

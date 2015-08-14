@@ -5,10 +5,10 @@ package server
 import (
 	"expvar"
 	"fmt"
-	myexpvar "github.com/chobie/momonga/expvar"
+	myexpvar "github.com/aonx/momonga/expvar"
 	"github.com/cloudfoundry/gosigar"
 	"github.com/influxdb/influxdb/client"
-	"github.com/chobie/momonga/util"
+	"github.com/aonx/momonga/util"
 	"reflect"
 	"runtime"
 	"strconv"

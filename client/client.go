@@ -5,10 +5,10 @@ package client
 
 import (
 	"fmt"
-	. "github.com/chobie/momonga/common"
-	codec "github.com/chobie/momonga/encoding/mqtt"
-	log "github.com/chobie/momonga/logger"
-	"github.com/chobie/momonga/util"
+	. "github.com/aonx/momonga/common"
+	codec "github.com/aonx/momonga/encoding/mqtt"
+	log "github.com/aonx/momonga/logger"
+	"github.com/aonx/momonga/util"
 	//	"io"
 	"net"
 	"sync"

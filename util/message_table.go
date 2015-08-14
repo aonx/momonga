@@ -7,7 +7,7 @@ package util
 // TODO: goroutine safe
 import (
 	"errors"
-	codec "github.com/chobie/momonga/encoding/mqtt"
+	codec "github.com/aonx/momonga/encoding/mqtt"
 	"sync"
 	"time"
 )

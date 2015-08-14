@@ -8,8 +8,8 @@ import (
 	"expvar"
 	"fmt"
 	"github.com/BurntSushi/toml"
-	. "github.com/chobie/momonga/common"
-	"github.com/chobie/momonga/util"
+	. "github.com/aonx/momonga/common"
+	"github.com/aonx/momonga/util"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -17,7 +17,7 @@ import (
 	"net/url"
 	"runtime"
 	"strconv"
-	//log "github.com/chobie/momonga/logger"
+	//log "github.com/aonx/momonga/logger"
 )
 
 func init() {
