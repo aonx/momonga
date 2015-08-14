@@ -4,12 +4,8 @@
 package server
 
 import (
-	"code.google.com/p/go.net/websocket"
 	"expvar"
 	"fmt"
-	"github.com/BurntSushi/toml"
-	. "github.com/aonx/momonga/common"
-	"github.com/aonx/momonga/util"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -17,6 +13,11 @@ import (
 	"net/url"
 	"runtime"
 	"strconv"
+
+	"github.com/BurntSushi/toml"
+	. "github.com/aonx/momonga/common"
+	"github.com/aonx/momonga/util"
+	"golang.org/x/net/websocket"
 	//log "github.com/aonx/momonga/logger"
 )
 
@@ -162,10 +163,13 @@ func (self *MyHttpServer) apiRouter(w http.ResponseWriter, req *http.Request) er
 				conn.SetId(ws.RemoteAddr().String())
 				self.Engine.HandleConnection(conn)
 			}),
-			Handshake: func (config *websocket.Config, req *http.Request) (err error) {
+			Handshake: func(config *websocket.Config, req *http.Request) (err error) {
 				config.Origin, err = websocket.Origin(config, req)
 				if err == nil && config.Origin == nil {
 					return fmt.Errorf("null origin")
+				}
+				if config.Origin == nil {
+					config.Origin, err = url.Parse("http://localhost")
 				}
 
 				if len(config.Protocol) > 1 {

@@ -24,7 +24,7 @@ cafile = ""
 certfile = ""
 keyfile = ""
 
-httpport = 9000
+http_port = 9000
 websocket_mount = "/mqtt"
 
 # provide http debug features (see server/http.go)
