@@ -8,8 +8,19 @@ import (
 	"bytes"
 	"encoding/binary"
 	"encoding/hex"
+	"encoding/json"
 	_ "errors"
 	"fmt"
+	"io"
+	"math/rand"
+	"net/url"
+	"os"
+	"regexp"
+	"runtime"
+	"strings"
+	"sync"
+	"time"
+
 	. "github.com/aonx/momonga/common"
 	"github.com/aonx/momonga/configuration"
 	"github.com/aonx/momonga/datastore"
@@ -17,14 +28,8 @@ import (
 	. "github.com/aonx/momonga/flags"
 	log "github.com/aonx/momonga/logger"
 	"github.com/aonx/momonga/util"
-	"io"
-	"math/rand"
-	"os"
-	"regexp"
-	"runtime"
-	"strings"
-	"sync"
-	"time"
+	"github.com/bndr/gopencils"
+	"github.com/elarasu/basis/stringutils"
 )
 
 var (
@@ -325,6 +330,45 @@ func (self *Momonga) SendPublishMessage(msg *codec.PublishMessage, client_id str
 	if len(msg.TopicName) < 1 {
 		return
 	}
+	rpc, jsonObj := stringutils.IsJsonRpc(string(msg.Payload))
+	if rpc {
+		fmt.Println("******************** message *****************", jsonObj)
+		obj := jsonObj.(map[string]interface{})
+		method := obj["method"]
+		paramsObj := obj["params"].(map[string]interface{})
+		// lets pick params and create a query string
+		params := url.Values{}
+		for k, v := range paramsObj {
+			if str, ok := v.(string); ok {
+				params.Add(k, str)
+			}
+		}
+		api := gopencils.Api("http://localhost:5080/api")
+		resp := new(interface{})
+
+		res := api.Res(strings.Replace(msg.TopicName, "/data/", "", 1), resp)
+		res.SetHeader("Authorization", "Bearer 2eEkMA6x7NmNQwzpE3qLvgvQgdILER")
+
+		switch method {
+		case "get":
+			res.Get()
+			fmt.Println(client_id, "GET ", msg.TopicName, params.Encode())
+		case "create":
+			res.Post(paramsObj)
+			fmt.Println(client_id, "POST ", msg.TopicName, params.Encode())
+		case "update":
+			fmt.Println(client_id, "PUT ", msg.TopicName, params.Encode())
+		case "delete":
+			fmt.Println(client_id, "DELETE ", msg.TopicName, params.Encode())
+		}
+		//fmt.Println(*resp)
+		result, _ := json.Marshal(*resp)
+		fmt.Println(string(result))
+		fmt.Println(msg)
+		msg.TopicName = "/client/" + client_id
+		msg.Payload = result
+		fmt.Println(msg)
+	}
 
 	// TODO: Have to persist retain message.
 	if msg.Retain > 0 {
@@ -541,7 +585,7 @@ func (self *Momonga) SendPublishMessage(msg *codec.PublishMessage, client_id str
 			continue
 		}
 
-		if cn.IsBridge() && clientId == client_id{
+		if cn.IsBridge() && clientId == client_id {
 			// Don't send message to same bridge
 			continue
 		}
@@ -624,7 +668,7 @@ func (self *Momonga) Run() {
 }
 
 func (self *Momonga) checkVersion(p *codec.ConnectMessage) error {
-	if p.Version & 0x80 > 0{
+	if p.Version&0x80 > 0 {
 		// Bridge connection
 		return nil
 	}
@@ -856,8 +900,8 @@ func (self *Momonga) Doom() {
 			log.Info("DOOM in %d seconds: %s\n", wait, v.GetId())
 			go func(x *MmuxConnection, wait int) {
 				time.AfterFunc(time.Second*time.Duration(wait), func() {
-						x.Close()
-					})
+					x.Close()
+				})
 			}(v, wait)
 		}
 	}
